@@ -41,8 +41,19 @@ function ManageCoursePage({
       [name]: name === 'authorId' ? parseInt(value) : value,
     }));
   };
+  const formIsValid = () => {
+    const { title, authorId, category } = course;
+    const errors = {};
+    if (!title) errors.title = 'Title is missing';
+    if (!authorId) errors.author = 'Author is required';
+    if (!category) errors.category = 'Category is required';
+    setErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
   const saveHandler = (event) => {
     event.preventDefault();
+    if (!formIsValid()) return;
+
     saveCourse(course)
       .then(() => {
         history.push('/courses');
