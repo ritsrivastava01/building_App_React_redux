@@ -7,6 +7,7 @@ import { bindActionCreators } from 'redux';
 import CourseList from './CourseList';
 import { Redirect } from 'react-router-dom';
 import Spinner from '../common/Spinner';
+import { toast } from 'react-toastify';
 
 class CoursesPage extends React.Component {
   state = {
@@ -25,6 +26,11 @@ class CoursesPage extends React.Component {
       });
     }
   }
+
+  deleteCourseHandler = async (courseId) => {
+    await this.props.actions.deleteCourse(courseId);
+    toast.success(`Course deleted successfully!`);
+  };
 
   render() {
     return (
@@ -46,7 +52,10 @@ class CoursesPage extends React.Component {
             >
               Add New Course
             </button>
-            <CourseList courses={this.props.courses}></CourseList>
+            <CourseList
+              courses={this.props.courses}
+              onDeleteClick={this.deleteCourseHandler}
+            ></CourseList>
           </>
         )}
       </>
@@ -82,6 +91,7 @@ const mapDespatchToProps = (dispatch) => ({
   actions: {
     loadCourses: bindActionCreators(courseActions.loadCourses, dispatch),
     loadAuthors: bindActionCreators(authorActions.loadAuthors, dispatch),
+    deleteCourse: bindActionCreators(courseActions.deleteCurse, dispatch),
   },
 });
 
